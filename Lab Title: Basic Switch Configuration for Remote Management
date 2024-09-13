@@ -1,0 +1,106 @@
+Network Description:
+In this lab, you will configure a Cisco switch to allow remote management via Telnet or SSH. The switch will be set up with a hostname, various passwords for security, and a management IP address assigned to VLAN 1. A default gateway will be configured so that the switch can be managed remotely from devices on different networks. Finally, the configuration will be saved, and various show commands will be used to verify the settings. This basic switch setup is essential for network administrators to perform remote configurations and management.
+
+Lab Title: Basic Switch Configuration for Remote Management
+Lab Tasks and Steps in Packet Tracer:
+Configure Hostname, Passwords, and IP Address for Remote Management
+
+Step 1: Enter privileged EXEC mode
+
+bash
+Copy code
+Switch> enable
+Switch#
+Step 2: Enter global configuration mode
+
+bash
+Copy code
+Switch# configure terminal
+Switch(config)#
+Step 3: Configure hostname
+
+bash
+Copy code
+Switch(config)# hostname S1
+S1(config)#
+Step 4: Configure console password
+
+bash
+Copy code
+S1(config)# line console 0
+S1(config-line)# password cisco
+S1(config-line)# login
+S1(config-line)# exit
+Step 5: Configure privileged EXEC mode (enable mode) password
+
+bash
+Copy code
+S1(config)# enable secret class
+Step 6: Configure VTY (Telnet/SSH) password for remote access
+
+bash
+Copy code
+S1(config)# line vty 0 4
+S1(config-line)# password cisco
+S1(config-line)# login
+S1(config-line)# exit
+Step 7: Configure the switch management IP address (assign IP address to VLAN 1)
+
+bash
+Copy code
+S1(config)# interface vlan 1
+S1(config-if)# ip address 192.168.1.2 255.255.255.0
+S1(config-if)# no shutdown
+S1(config-if)# exit
+Step 8: Configure a default gateway for the switch
+
+bash
+Copy code
+S1(config)# ip default-gateway 192.168.1.1
+Step 9: Save the configuration
+
+bash
+Copy code
+S1(config)# end
+S1# write memory
+Verify the Switch Configuration Using Show Commands
+
+Check the switch's hostname, VLAN configuration, and management IP:
+
+bash
+Copy code
+S1# show running-config
+Verify the switch's IP configuration:
+
+bash
+Copy code
+S1# show ip interface brief
+Verify the default gateway:
+
+bash
+Copy code
+S1# show running-config | include ip default-gateway
+Verify VLAN configuration:
+
+bash
+Copy code
+S1# show vlan brief
+Verify port status:
+
+bash
+Copy code
+S1# show interfaces status
+Verify passwords (Note: This shows encrypted passwords):
+
+bash
+Copy code
+S1# show running-config | include enable secret
+S1# show running-config | include line vty
+S1# show running-config | include line console
+Explanation:
+hostname S1: Sets the switch hostname to "S1."
+enable secret class: Configures the password for privileged EXEC mode.
+interface vlan 1: Configures VLAN 1 with the management IP address.
+ip default-gateway 192.168.1.1: Sets the default gateway for remote management.
+write memory: Saves the configuration to the switch's startup config.
+End of Lab
