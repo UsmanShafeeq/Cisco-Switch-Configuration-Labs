@@ -1,0 +1,158 @@
+# Lab Title: VLAN Creation and Management
+
+## Objectives:
+- Create multiple VLANs on a Cisco switch.
+- Assign specific switch ports to different VLANs.
+- Verify VLAN configurations using `show vlan` and other related commands.
+- Implement best practices for VLAN management and port security.
+
+## Overview:
+In this lab, we will configure VLANs on a Cisco switch, assign specific ports to different VLANs, and verify the configuration. Additionally, we will implement basic port security to enhance network protection. VLANs (Virtual Local Area Networks) help segment network traffic, improving performance, security, and management in enterprise networks.
+
+---
+
+## Steps to Configure VLANs and Manage Ports:
+
+### Step 1: Enter Privileged EXEC Mode
+```bash
+Switch> enable
+Switch#
+Step 2: Enter Global Configuration Mode
+bash
+Copy code
+Switch# configure terminal
+Switch(config)#
+Step 3: Create VLANs
+VLAN 10 (Sales)
+VLAN 20 (Engineering)
+VLAN 30 (Marketing)
+bash
+Copy code
+Switch(config)# vlan 10
+Switch(config-vlan)# name Sales
+Switch(config-vlan)# exit
+
+Switch(config)# vlan 20
+Switch(config-vlan)# name Engineering
+Switch(config-vlan)# exit
+
+Switch(config)# vlan 30
+Switch(config-vlan)# name Marketing
+Switch(config-vlan)# exit
+Step 4: Assign Ports to VLANs
+Assign FastEthernet 0/1 to VLAN 10 (Sales)
+Assign FastEthernet 0/2 to VLAN 20 (Engineering)
+Assign FastEthernet 0/3 to VLAN 30 (Marketing)
+bash
+Copy code
+Switch(config)# interface fastEthernet 0/1
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10
+Switch(config-if)# exit
+
+Switch(config)# interface fastEthernet 0/2
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 20
+Switch(config-if)# exit
+
+Switch(config)# interface fastEthernet 0/3
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 30
+Switch(config-if)# exit
+Step 5: Save the Configuration
+It is crucial to save your configuration so it is persistent across reboots.
+
+bash
+Copy code
+Switch(config)# end
+Switch# write memory
+Best Practices: Secure Port Configuration
+For added security, it's a good practice to secure switch ports. You can configure port security to limit the number of MAC addresses allowed on each port, thereby mitigating the risk of unauthorized access.
+
+Example: Securing FastEthernet 0/1
+bash
+Copy code
+Switch(config)# interface fastEthernet 0/1
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10
+Switch(config-if)# switchport port-security
+Switch(config-if)# switchport port-security maximum 2
+Switch(config-if)# switchport port-security violation restrict
+Switch(config-if)# switchport port-security mac-address sticky
+Switch(config-if)# exit
+Explanation:
+switchport port-security: Enables port security.
+maximum 2: Limits the number of allowed MAC addresses to 2.
+violation restrict: Restricts access if a violation occurs (drops packets but does not shut the port).
+mac-address sticky: Automatically learns and retains the first 2 MAC addresses that connect.
+Step 6: Verify VLANs and Port Assignments
+Verify VLANs:
+bash
+Copy code
+Switch# show vlan brief
+This command provides a summary of all VLANs and their associated ports.
+
+Verify Port Status:
+bash
+Copy code
+Switch# show interfaces status
+This command shows the current status of all switch interfaces, including their VLAN assignments.
+
+Verify VLAN Configuration for a Specific Interface:
+bash
+Copy code
+Switch# show interfaces fastethernet 0/1 switchport
+Explanation of Commands:
+vlan <VLAN ID>: Creates a VLAN with the specified ID.
+name <VLAN Name>: Assigns a name to the VLAN.
+switchport mode access: Sets the switch port to access mode for connecting end devices.
+switchport access vlan <VLAN ID>: Assigns the port to a specific VLAN.
+show vlan brief: Displays a summary of all VLANs and associated ports.
+show interfaces <interface> switchport: Displays detailed switchport information for a specific interface.
+Sample Output:
+bash
+Copy code
+Switch# show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/4, Fa0/5, Fa0/6, Fa0/7
+10   Sales                            active    Fa0/1
+20   Engineering                      active    Fa0/2
+30   Marketing                        active    Fa0/3
+This output shows that VLANs have been successfully created, and the respective ports have been assigned.
+
+Troubleshooting:
+Issue: Port is in Dynamic Auto Mode
+If a port is in dynamic auto mode, it may not operate as expected for access or trunking. Set the port explicitly to access mode for VLAN assignment:
+
+bash
+Copy code
+Switch(config)# interface fastethernet 0/1
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10
+Switch(config-if)# exit
+Issue: Interface is Down
+If the Operational Mode shows as "down," check the cable connection or the status of the connected device. To bring the interface up, use:
+
+bash
+Copy code
+Switch(config)# interface fastethernet 0/1
+Switch(config-if)# no shutdown
+Switch(config-if)# exit
+Additional Resources:
+Cisco VLAN Configuration Guide
+Introduction to VLANs
+Conclusion:
+In this lab, you have learned how to create and manage VLANs on a Cisco switch. You also explored port security options and verified the VLAN configuration using various show commands. Implementing VLANs helps improve network segmentation and security, making your network more efficient and secure.
+
+markdown
+Copy code
+
+### Key Enhancements:
+1. **Port Security**: Introduced port security to restrict unauthorized access to switch ports.
+2. **Troubleshooting Section**: Added common issues and how to resolve them.
+3. **Best Practices**: Followed secure and optimized port configuration techniques.
+4. **Additional Resources**: Linked helpful resources for further reading.
+
+This `README.md` is comprehensive and suitable for anyone learning how to configure VLANs on Cisco 
