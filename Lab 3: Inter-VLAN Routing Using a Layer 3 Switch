@@ -1,0 +1,110 @@
+Lab 3: Inter-VLAN Routing Using a Layer 3 Switch
+This lab focuses on configuring a Layer 3 switch to enable inter-VLAN routing so that devices on different VLANs can communicate with each other. We will assign IP addresses to VLAN interfaces, configure the switch for routing, and test communication between devices on separate VLANs.
+
+Lab Topology
+Layer 3 Switch: Acts as the router for VLANs.
+PC1: VLAN 10 (IP: 192.168.10.10/24)
+PC2: VLAN 20 (IP: 192.168.20.10/24)
+PC3: VLAN 30 (IP: 192.168.30.10/24)
+Steps Overview:
+Create VLANs on the Layer 3 switch.
+Assign ports to the correct VLANs.
+Configure VLAN interfaces with IP addresses for routing.
+Enable IP routing on the Layer 3 switch.
+Test communication between devices in different VLANs.
+Step 1: Create VLANs on the Layer 3 Switch
+Enter the global configuration mode and create the required VLANs.
+bash
+Copy code
+Switch# configure terminal
+Switch(config)# vlan 10
+Switch(config-vlan)# name Sales
+Switch(config-vlan)# vlan 20
+Switch(config-vlan)# name HR
+Switch(config-vlan)# vlan 30
+Switch(config-vlan)# name IT
+Switch(config-vlan)# exit
+Step 2: Assign Ports to VLANs
+Assign the switchports connected to the PCs to their respective VLANs.
+bash
+Copy code
+Switch(config)# interface GigabitEthernet0/1
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10
+Switch(config-if)# exit
+
+Switch(config)# interface GigabitEthernet0/2
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 20
+Switch(config-if)# exit
+
+Switch(config)# interface GigabitEthernet0/3
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 30
+Switch(config-if)# exit
+Step 3: Configure VLAN Interfaces for Inter-VLAN Routing
+On the Layer 3 switch, create Layer 3 interfaces (SVIs - Switch Virtual Interfaces) for each VLAN to act as the default gateway for devices on that VLAN.
+bash
+Copy code
+Switch(config)# interface vlan 10
+Switch(config-if)# ip address 192.168.10.1 255.255.255.0
+Switch(config-if)# no shutdown
+Switch(config-if)# exit
+
+Switch(config)# interface vlan 20
+Switch(config-if)# ip address 192.168.20.1 255.255.255.0
+Switch(config-if)# no shutdown
+Switch(config-if)# exit
+
+Switch(config)# interface vlan 30
+Switch(config-if)# ip address 192.168.30.1 255.255.255.0
+Switch(config-if)# no shutdown
+Switch(config-if)# exit
+Step 4: Enable Routing on the Layer 3 Switch
+Enable IP routing on the Layer 3 switch so that it can route traffic between VLANs.
+bash
+Copy code
+Switch(config)# ip routing
+Step 5: Configure the PCs with the Correct IP Information
+Assign the correct IP addresses and default gateway to each PC.
+PC1 (VLAN 10)
+
+IP Address: 192.168.10.10
+Subnet Mask: 255.255.255.0
+Default Gateway: 192.168.10.1
+PC2 (VLAN 20)
+
+IP Address: 192.168.20.10
+Subnet Mask: 255.255.255.0
+Default Gateway: 192.168.20.1
+PC3 (VLAN 30)
+
+IP Address: 192.168.30.10
+Subnet Mask: 255.255.255.0
+Default Gateway: 192.168.30.1
+Step 6: Test Communication Between VLANs
+Test the connectivity between devices in different VLANs.
+PC1 (192.168.10.10) should be able to ping PC2 (192.168.20.10) and PC3 (192.168.30.10).
+PC2 (192.168.20.10) should be able to ping PC1 (192.168.10.10) and PC3 (192.168.30.10).
+PC3 (192.168.30.10) should be able to ping PC1 (192.168.10.10) and PC2 (192.168.20.10).
+Run the following test from the command prompt of each PC:
+
+bash
+Copy code
+ping 192.168.20.10  # Ping PC2 from PC1
+ping 192.168.30.10  # Ping PC3 from PC1
+Lab Verification
+Verify that the trunking between switches (if applicable) is working properly.
+Use the following commands on the Layer 3 switch to verify the configuration:
+bash
+Copy code
+Switch# show ip interface brief    # To check the status of VLAN interfaces
+Switch# show vlan brief            # To verify VLANs and port assignments
+Switch# show ip route              # To verify IP routing
+Switch# show interfaces trunk      # To verify trunking (if configured)
+Troubleshooting Tips:
+Ensure that all VLAN interfaces are up and configured with the correct IP addresses.
+Verify that devices in each VLAN have the correct default gateway.
+If ping fails, check the cabling and port configurations on the switch.
+Ensure that ip routing is enabled on the Layer 3 switch.
+By following these steps, you should have successfully configured inter-VLAN routing on a Layer 3 switch, allowing devices on different VLANs to communicate with each other.
